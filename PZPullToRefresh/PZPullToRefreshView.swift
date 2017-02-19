@@ -23,13 +23,27 @@ public final class PZPullToRefreshView: UIView {
 
     public var statusTextColor = UIColor.white
     public var timeTextColor = UIColor(red: 0.95, green: 0.82, blue: 0.79, alpha: 1)
-    public var bgColor = UIColor(red: 0.82, green: 0.44, blue: 0.39, alpha: 1)
-
+    public var bgColor = UIColor(red: 0.82, green: 0.44, blue: 0.39, alpha: 1) {
+        didSet {
+            self.backgroundColor = bgColor
+        }
+    }
+    
     public var flipAnimatioDutation: CFTimeInterval = 0.18
     public var thresholdValue: CGFloat = 60.0
 
     public var lastUpdatedKey = "RefreshLastUpdated"
     public var isShowUpdatedTime = true
+    
+    public var statusLabelTextNormal = "Pull down to refresh" {
+        didSet {
+            statusLabel?.text = statusLabelTextNormal
+        }
+    }
+    public var statusLabelTextPulling = "Release to refresh"
+    public var statusLabelTextLoading = "Loading ..."
+    public var lastUpdatedLabelText = "Last Updated:"
+    public var dateFormat = "yyyy/MM/dd/ hh:mm:a"
     
     fileprivate var _isLoading = false
     public var isLoading: Bool {
@@ -49,15 +63,15 @@ public final class PZPullToRefreshView: UIView {
         set {
             switch newValue {
             case .normal:
-                statusLabel?.text = "Pull down to refresh"
+                statusLabel?.text = statusLabelTextNormal
                 activityView?.stopAnimating()
                 refreshLastUpdatedDate()
                 rotateArrowImage(angle: 0)
             case .pulling:
-                statusLabel?.text = "Release to refresh"
+                statusLabel?.text = statusLabelTextPulling
                 rotateArrowImage(angle: CGFloat(M_PI))
             case .loading:
-                statusLabel?.text = "Loading..."
+                statusLabel?.text = statusLabelTextLoading
                 activityView?.startAnimating()
                 CATransaction.begin()
                 CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
@@ -140,8 +154,8 @@ public final class PZPullToRefreshView: UIView {
                     let formatter = DateFormatter()
                     formatter.amSymbol = "AM"
                     formatter.pmSymbol = "PM"
-                    formatter.dateFormat = "yyyy/MM/dd/ hh:mm:a"
-                    lastUpdateText = "Last Updated: \(formatter.string(from: date))"
+                    formatter.dateFormat = dateFormat
+                    lastUpdateText = "\(lastUpdatedLabelText) \(formatter.string(from: date))"
                 }
                 lastUpdatedLabel?.text = lastUpdateText
                 let userDefaults = UserDefaults.standard
