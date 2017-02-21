@@ -31,6 +31,7 @@ public final class PZPullToRefreshView: UIView {
     
     public var flipAnimatioDutation: CFTimeInterval = 0.18
     public var thresholdValue: CGFloat = 60.0
+    public var scrollViewContentInset = UIEdgeInsets.zero
 
     public var lastUpdatedKey = "RefreshLastUpdated"
     public var isShowUpdatedTime = true
@@ -209,7 +210,7 @@ public final class PZPullToRefreshView: UIView {
     public func refreshScrollViewDataSourceDidFinishedLoading(_ scrollView: UIScrollView) {
         UIView.beginAnimations(nil, context: nil)
         UIView.setAnimationDuration(0.4)
-        scrollView.contentInset = UIEdgeInsets.zero
+        scrollView.contentInset = scrollViewContentInset
         UIView.commitAnimations()
         arrowImage?.isHidden = false
         state = .normal
