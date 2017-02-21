@@ -92,6 +92,8 @@ public final class PZPullToRefreshView: UIView {
     public var lastUpdatedLabel: UILabel?
     public var statusLabel: UILabel?
     public var arrowImage: CALayer?
+    public var arrowUIImage: UIImage?
+    
     public var activityView: UIActivityIndicatorView?
     public var delegate: PZPullToRefreshDelegate?
     public var lastUpdatedLabelCustomFormatter: ( (_ date:Date)->String )?
@@ -142,6 +144,15 @@ public final class PZPullToRefreshView: UIView {
 
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+    
+    public func arrowImage(_ image: UIImage?, size: CGSize) {
+        let layer: CALayer = CALayer()
+        layer.frame = CGRect(x: 25.0, y: frame.size.height - 40.0, width: size.width, height: size.height)
+        layer.contentsGravity = kCAGravityResizeAspect
+        layer.contents = image?.cgImage
+        self.layer.addSublayer(layer)
+        arrowImage = layer
     }
     
     public func refreshLastUpdatedDate() {
